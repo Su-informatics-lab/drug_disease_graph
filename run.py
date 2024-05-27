@@ -72,13 +72,13 @@ def dfs(graph, class_id, visited, lookup):
         return
     visited.add(class_id)
     members = get_class_members(class_id)
-    time.sleep(1)  # delay to avoid overwhelming the API
+    time.sleep(.1)  # delay to avoid overwhelming the API
     for rxcui, name, relation in members:
         graph.add_node(rxcui, label=name)
         graph.add_edge(class_id, rxcui, relation=relation)
         lookup[rxcui] = name
     contexts = get_class_contexts(class_id)
-    time.sleep(1)  # delay to avoid overwhelming the API
+    time.sleep(.1)  # delay to avoid overwhelming the API
     for context in contexts:
         for sub_class_id, sub_class_name in context:
             if sub_class_id not in visited:
@@ -96,10 +96,10 @@ if __name__ == "__main__":
 
     for drug in tqdm(drugs):
         rxcui = get_rxcui_by_name(drug)
-        time.sleep(1)  # delay to avoid overwhelming the API
+        time.sleep(.1)  # delay to avoid overwhelming the API
         if rxcui:
             classes = get_classes_by_rxcui(rxcui)
-            time.sleep(1)  # delay to avoid overwhelming the API
+            time.sleep(.1)  # delay to avoid overwhelming the API
             graph.add_node(rxcui, label=drug)
             lookup[rxcui] = drug
             for class_id, class_name, relation in classes:
