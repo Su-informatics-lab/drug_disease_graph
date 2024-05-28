@@ -95,20 +95,21 @@ if __name__ == "__main__":
     lookup = {}  # lookup table for annotations
 
     for drug in tqdm(drugs):
-        rxcui = get_rxcui_by_name(drug)
-        time.sleep(.1)  # delay to avoid overwhelming the API
-        if rxcui:
-            classes = get_classes_by_rxcui(rxcui)
+        for d in drug.split(' / '):
+            rxcui = get_rxcui_by_name(d)
             time.sleep(.1)  # delay to avoid overwhelming the API
-            graph.add_node(rxcui, label=drug)
-            lookup[rxcui] = drug
-            for class_id, class_name, relation in classes:
-                graph.add_node(class_id, label=class_name)
-                graph.add_edge(rxcui, class_id, relation=relation)
-                lookup[class_id] = class_name
-                dfs(graph, class_id, visited, lookup)
-        else:
-            no_matches.append(drug)
+            if rxcui:
+                classes = get_classes_by_rxcui(rxcui)
+                time.sleep(.1)  # delay to avoid overwhelming the API
+                graph.add_node(rxcui, label=d)
+                lookup[rxcui] = d
+                for class_id, class_name, relation in classes:
+                    graph.add_node(class_id, label=class_name)
+                    graph.add_edge(rxcui, class_id, relation=relation)
+                    lookup[class_id] = class_name
+                    dfs(graph, class_id, visited, lookup)
+            else:
+                no_matches.append(d)
 
     # save the graph to a GraphML file
     nx.write_graphml(graph, "drug_disease_graph.graphml")
