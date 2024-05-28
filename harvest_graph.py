@@ -95,7 +95,10 @@ if __name__ == "__main__":
     lookup = {}  # lookup table for annotations
 
     for drug in tqdm(drugs):
-        for d in drug.split(' / '):
+        # get all possible drugs from a raw field
+        ds = drug.split(' / ')
+        ds.append(drug)
+        for d in ds:
             rxcui = get_rxcui_by_name(d)
             time.sleep(.1)  # delay to avoid overwhelming the API
             if rxcui:
