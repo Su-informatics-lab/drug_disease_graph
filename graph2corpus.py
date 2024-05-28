@@ -3,6 +3,7 @@ This module converts the harvested graph into a plain text corpus.
 """
 
 import networkx as nx
+import random
 
 __author__ = "hw56@indiana.edu"
 __version__ = "0.0.1"
@@ -61,9 +62,11 @@ if __name__ == "__main__":
 
     # read the graph
     graph = read_graph(graph_file)
-    result = create_sentences(graph)
-    sentences = result[0]
-    missing_relationships = result[1]
+    sentences, missing_relationships = create_sentences(graph)
+
+    # shuffle the sentences with a seed for reproducibility
+    random.seed(42)
+    random.shuffle(sentences)
 
     # save sentences to a text file
     save_sentences(sentences, "rxnorm.txt")
