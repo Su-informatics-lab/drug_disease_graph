@@ -12,6 +12,7 @@ import json
 import requests
 import networkx as nx
 import time
+import pandas as pd
 from tqdm import tqdm
 
 def get_rxcui_by_name(drug_name):
@@ -88,7 +89,11 @@ def dfs(graph, class_id, visited, lookup):
                 dfs(graph, sub_class_id, visited, lookup)
 
 if __name__ == "__main__":
-    drugs = json.load(open('audit_c_threeDrugs_deduplicated.json'))
+    # this is a file of the most recent threee drugs used by the population
+    # drugs = json.load(open('audit_c_threeDrugs_deduplicated.json'))
+    # this is a file of all drugs from the platform
+    drugs_df = pd.read_csv(open('rxnorm_all_drugs_30495.csv'))
+    drugs = drugs_df.STANDARD_CONCEPT_NAME.tolist()
     no_matches = []
     visited = set()
     graph = nx.DiGraph()
